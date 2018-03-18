@@ -1,5 +1,9 @@
 # Docker registry cache
 
+![License](https://img.shields.io/packagist/l/cakephp/app.svg?style=flat-square)
+
+![Oyster registry](https://www.docker.com/sites/default/files/oyster-registry-3.png)
+
 ## Concept
 
 - Create a Docker registry cache for local network to speed up docker image download and keep a lower bandwidth.
@@ -23,8 +27,17 @@ and start it up:
 $ cd registry
 $ docker-compose up
 ```
+It's done.
 
-and it's done.
+### Optionally
+Map the data folder to a better place: edit `docker-compose.yml` row
+
+```yaml
+    volumes:
+      - ./data:/var/lib/registry:rw
+```
+and modify `./data` to fit your needs.
+
 
 ## Client setup
 
@@ -32,7 +45,7 @@ Modify or create the file `/etc/docker/daemon.json` and add the local mirror set
 
 ```json
 {
-  "registry-mirrors": ["https://<my-docker-mirror-host-ip>:5000"]
+  "registry-mirrors": ["http://<my-docker-mirror-host-ip>:5000"]
 }
 ```
 
@@ -80,6 +93,8 @@ $ curl http://<my-docker-mirror-host-ip>:5000/v2/_catalog
 In the server log some line should pass showing desired activity too.
 The images downloaded will be stored in the server `data` folder and listed in the nested folder `data/docker/registry/v2/repositories/library/`.
 
+## TBD
+Secure the registry implementing ssl (https) on port 5000.
 
 ## Some description
 
@@ -140,9 +155,13 @@ proxy:
 
 ```json
 {
-  "registry-mirrors": ["https://<my-docker-mirror-host-ip>:5000"]
+  "registry-mirrors": ["http://<my-docker-mirror-host-ip>:5000/"]
 }
 ```
+On macOS, open preferences of Docker application from the menu bar, then go to  Daemon tab -> Advanced and insert the previous row. Apply and restart. Test if it works as expected.
+
+![macOS registry setup](https://dl.dropboxusercontent.com/s/lietx1gxcbg621o/macOS-docker-registry-setup.png)
+
 
 ## Documentation
 - [Registry configuration](https://docs.docker.com/registry/configuration/)
