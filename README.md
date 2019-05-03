@@ -25,7 +25,7 @@ and start it up:
 
 ```bash
 $ cd registry
-$ docker-compose up
+$ docker-compose up -d
 ```
 It's done.
 
